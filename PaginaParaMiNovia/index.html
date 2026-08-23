@@ -1,0 +1,2497 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Para alguien especial ❤️</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+
+            font-family:
+                Georgia,
+                'Times New Roman',
+                serif;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #7a304c 0%,
+                    #351526 45%,
+                    #180a13 100%
+                );
+
+            overflow: hidden;
+        }
+
+
+        /* ==============================
+           PANTALLA DE BLOQUEO
+        ============================== */
+
+        #pantalla-bloqueo {
+
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #8f3d5c,
+                    #260e1c 75%
+                );
+
+            transition:
+                opacity 1.3s ease,
+                visibility 1.3s ease;
+        }
+
+        #pantalla-bloqueo.ocultar {
+
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .bloqueo-contenido {
+
+            width: 100%;
+            max-width: 500px;
+
+            padding: 45px 30px;
+
+            text-align: center;
+
+            background:
+                rgba(255, 255, 255, 0.1);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.25);
+
+            border-radius: 30px;
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.45);
+
+            animation:
+                aparecer 1.5s ease;
+        }
+
+        .candado {
+
+            font-size: 60px;
+            margin-bottom: 15px;
+
+            animation:
+                latido 2s infinite;
+        }
+
+        .bloqueo-contenido h1 {
+
+            margin: 10px 0;
+            font-size: 34px;
+        }
+
+        .bloqueo-contenido p {
+
+            color: #f8dfe7;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        #password {
+
+            width: 220px;
+
+            padding: 14px;
+
+            margin-top: 15px;
+
+            border:
+                2px solid #eaa7ba;
+
+            border-radius: 30px;
+
+            outline: none;
+
+            text-align: center;
+
+            font-size: 20px;
+
+            letter-spacing: 5px;
+
+            background: white;
+        }
+
+        #desbloquear {
+
+            display: block;
+
+            margin: 20px auto 0;
+
+            padding: 14px 30px;
+
+            border: none;
+
+            border-radius: 30px;
+
+            background: #e75480;
+
+            color: white;
+
+            font-size: 17px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 5px 20px
+                rgba(231, 84, 128, 0.4);
+        }
+
+        #desbloquear:hover {
+
+            transform:
+                scale(1.05);
+
+            background:
+                #ff6f99;
+        }
+
+
+        /* ==============================
+           CARGANDO
+        ============================== */
+
+        #cargando {
+
+            position: fixed;
+            inset: 0;
+
+            z-index: 900;
+
+            display: none;
+
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            background:
+                radial-gradient(
+                    circle,
+                    #74334c,
+                    #1b0a12
+                );
+        }
+
+        #cargando.mostrar {
+
+            display: flex;
+        }
+
+        #cargando h2 {
+
+            font-size: 30px;
+            padding: 20px;
+
+            animation:
+                aparecer 1s ease;
+        }
+
+
+        /* ==============================
+           CONTENIDO
+        ============================== */
+
+        #contenido {
+
+            display: none;
+
+            width: 100vw;
+            height: 100vh;
+
+            position: relative;
+        }
+
+
+        /* ==============================
+           PANTALLAS
+        ============================== */
+
+        .pantalla {
+
+            position: absolute;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            padding:
+                40px 25px 100px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transform:
+                scale(0.96)
+                translateY(20px);
+
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s ease,
+                visibility 0.7s ease;
+
+            overflow-y: auto;
+
+            z-index: 2;
+        }
+
+        .pantalla.activa {
+
+            opacity: 1;
+            visibility: visible;
+
+            transform:
+                scale(1)
+                translateY(0);
+
+            z-index: 3;
+        }
+
+        .contenido-pantalla {
+
+            width: 100%;
+
+            max-width: 1000px;
+
+            margin: auto;
+        }
+
+
+        /* ==============================
+           TÍTULOS
+        ============================== */
+
+        .titulo-principal {
+
+            font-size:
+                clamp(40px, 7vw, 70px);
+
+            margin:
+                0 0 20px;
+
+            text-shadow:
+                0 5px 25px
+                rgba(255, 100, 150, 0.5);
+
+            animation:
+                aparecer 1.5s ease;
+        }
+
+        .titulo {
+
+            font-size:
+                clamp(35px, 6vw, 58px);
+
+            margin:
+                0 0 25px;
+
+            color: #ffe0e9;
+
+            text-shadow:
+                0 0 25px
+                rgba(255, 120, 160, 0.6);
+        }
+
+        .subtitulo {
+
+            font-size: 21px;
+
+            color: #f8dce5;
+
+            line-height: 1.7;
+
+            max-width: 700px;
+
+            margin:
+                20px auto;
+        }
+
+
+        /* ==============================
+           BOTONES
+        ============================== */
+
+        .botones {
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin-top: 35px;
+        }
+
+        .btn {
+
+            border: none;
+
+            padding:
+                14px 30px;
+
+            border-radius: 30px;
+
+            background:
+                #e75480;
+
+            color: white;
+
+            font-family: inherit;
+
+            font-size: 17px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 7px 25px
+                rgba(231, 84, 128, 0.35);
+
+            transition:
+                transform 0.3s ease,
+                background 0.3s ease;
+        }
+
+        .btn:hover {
+
+            transform:
+                translateY(-3px)
+                scale(1.04);
+
+            background:
+                #ff6f99;
+        }
+
+        .btn-secundario {
+
+            background:
+                rgba(255,255,255,0.12);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.3);
+        }
+
+
+        /* ==============================
+           CUBO 3D
+        ============================== */
+
+        .escena {
+
+            width: 300px;
+            height: 300px;
+
+            margin:
+                45px auto;
+
+            perspective:
+                1100px;
+        }
+
+        .cubo {
+
+            width: 300px;
+            height: 300px;
+
+            position: relative;
+
+            transform-style:
+                preserve-3d;
+
+            animation:
+                girar 16s infinite linear;
+        }
+
+        .cara {
+
+            position: absolute;
+
+            width: 300px;
+            height: 300px;
+
+            overflow: hidden;
+
+            border:
+                5px solid
+                rgba(255,255,255,0.9);
+
+            border-radius: 20px;
+
+            background: white;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.45);
+        }
+
+        .cara img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .frente {
+
+            transform:
+                translateZ(150px);
+        }
+
+        .atras {
+
+            transform:
+                rotateY(180deg)
+                translateZ(150px);
+        }
+
+        .derecha {
+
+            transform:
+                rotateY(90deg)
+                translateZ(150px);
+        }
+
+        .izquierda {
+
+            transform:
+                rotateY(-90deg)
+                translateZ(150px);
+        }
+
+        @keyframes girar {
+
+            0% {
+                transform:
+                    rotateY(0deg);
+            }
+
+            25% {
+                transform:
+                    rotateY(90deg);
+            }
+
+            50% {
+                transform:
+                    rotateY(180deg);
+            }
+
+            75% {
+                transform:
+                    rotateY(270deg);
+            }
+
+            100% {
+                transform:
+                    rotateY(360deg);
+            }
+        }
+
+
+        /* ==============================
+           FECHA
+        ============================== */
+
+        .fecha {
+
+            font-size: 34px;
+
+            margin:
+                20px 0;
+
+            letter-spacing: 5px;
+
+            color: #ffd8e3;
+
+            text-shadow:
+                0 0 20px
+                rgba(255,130,170,0.7);
+        }
+
+
+        /* ==============================
+           CONTADOR
+        ============================== */
+
+        .contador {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 15px;
+
+            margin:
+                35px auto;
+
+            max-width: 800px;
+        }
+
+        .tiempo {
+
+            min-width: 115px;
+
+            padding:
+                20px 15px;
+
+            background:
+                rgba(255,255,255,0.1);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.2);
+
+            border-radius: 20px;
+
+            backdrop-filter:
+                blur(10px);
+        }
+
+        .numero {
+
+            display: block;
+
+            font-size: 32px;
+
+            font-weight: bold;
+        }
+
+        .etiqueta {
+
+            display: block;
+
+            margin-top: 5px;
+
+            color: #eabaca;
+
+            font-size: 14px;
+        }
+
+
+        /* ==============================
+           HISTORIA
+        ============================== */
+
+        .historia {
+
+            max-width: 800px;
+        }
+
+        .historia-corazon {
+
+            font-size: 38px;
+
+            margin-bottom: 20px;
+
+            animation:
+                latido 2s infinite;
+        }
+
+        .frase-especial {
+
+            margin-top: 40px;
+
+            padding:
+                30px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.2);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,0.2);
+
+            font-size: 23px;
+
+            line-height: 2;
+
+            color: #ffdce6;
+        }
+
+        .frase-especial strong {
+
+            color: white;
+        }
+
+
+        /* ==============================
+           CARTA
+        ============================== */
+
+        .carta {
+
+            max-width: 800px;
+
+            margin: auto;
+
+            padding:
+                45px 40px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.97),
+                    rgba(255,240,245,0.97)
+                );
+
+            color:
+                #4c2936;
+
+            border-radius:
+                25px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,0.4);
+        }
+
+        .carta h2 {
+
+            color:
+                #c83f69;
+
+            font-size:
+                35px;
+
+            margin-top: 0;
+        }
+
+        .texto-escritura {
+
+            min-height: 300px;
+
+            font-size: 19px;
+
+            line-height: 1.9;
+
+            text-align: left;
+        }
+
+
+        /* ==============================
+           FINAL
+        ============================== */
+
+        .corazon-final {
+
+            font-size: 90px;
+
+            animation:
+                latido 1.5s infinite;
+        }
+
+        .final h2 {
+
+            font-size:
+                clamp(38px, 7vw, 65px);
+
+            margin:
+                20px;
+
+            text-shadow:
+                0 0 30px
+                rgba(255,100,150,0.7);
+        }
+
+        .final p {
+
+            font-size: 23px;
+
+            color:
+                #f2ced9;
+
+            max-width: 650px;
+
+            line-height: 1.7;
+        }
+
+
+        /* ==============================
+           CORAZONES
+        ============================== */
+
+        .corazones {
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            overflow: hidden;
+
+            z-index: 1;
+        }
+
+        .corazon {
+
+            position: absolute;
+
+            bottom: -50px;
+
+            opacity: 0;
+
+            animation:
+                flotar linear infinite;
+        }
+
+        @keyframes flotar {
+
+            0% {
+
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+
+                opacity: 0;
+            }
+
+            15% {
+
+                opacity: 0.8;
+            }
+
+            100% {
+
+                transform:
+                    translateY(-110vh)
+                    rotate(360deg);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* ==============================
+           INDICADORES
+        ============================== */
+
+        #indicadores {
+
+            position: fixed;
+
+            bottom: 22px;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 100;
+
+            display: flex;
+
+            gap: 8px;
+        }
+
+        .punto {
+
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.35);
+
+            transition:
+                0.3s;
+        }
+
+        .punto.activo {
+
+            width: 25px;
+
+            border-radius: 10px;
+
+            background:
+                #ff9fbb;
+        }
+
+
+        /* ==============================
+           BOTÓN MÚSICA
+        ============================== */
+
+        #boton-musica {
+
+            position: fixed;
+
+            bottom: 55px;
+
+            right: 20px;
+
+            z-index: 100;
+
+            width: 55px;
+            height: 55px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background:
+                #e75480;
+
+            color: white;
+
+            font-size: 23px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 5px 25px
+                rgba(0,0,0,0.35);
+
+            transition:
+                0.3s;
+        }
+
+        #boton-musica:hover {
+
+            transform:
+                scale(1.1);
+        }
+
+
+        /* ==============================
+           ANIMACIONES
+        ============================== */
+
+        @keyframes aparecer {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(30px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+        @keyframes latido {
+
+            0%,100% {
+
+                transform:
+                    scale(1);
+            }
+
+            50% {
+
+                transform:
+                    scale(1.12);
+            }
+        }
+
+
+        /* ==============================
+           MÓVIL
+        ============================== */
+
+        @media (max-width:600px) {
+
+            .pantalla {
+
+                padding:
+                    30px 18px 100px;
+            }
+
+            .escena {
+
+                width: 230px;
+                height: 230px;
+
+                margin:
+                    30px auto;
+            }
+
+            .cubo,
+            .cara {
+
+                width: 230px;
+                height: 230px;
+            }
+
+            .frente {
+
+                transform:
+                    translateZ(115px);
+            }
+
+            .atras {
+
+                transform:
+                    rotateY(180deg)
+                    translateZ(115px);
+            }
+
+            .derecha {
+
+                transform:
+                    rotateY(90deg)
+                    translateZ(115px);
+            }
+
+            .izquierda {
+
+                transform:
+                    rotateY(-90deg)
+                    translateZ(115px);
+            }
+
+            .subtitulo {
+
+                font-size: 18px;
+            }
+
+            .fecha {
+
+                font-size: 27px;
+            }
+
+            .contador {
+
+                gap: 8px;
+            }
+
+            .tiempo {
+
+                min-width: 88px;
+
+                padding:
+                    15px 8px;
+            }
+
+            .numero {
+
+                font-size: 25px;
+            }
+
+            .etiqueta {
+
+                font-size: 12px;
+            }
+
+            .carta {
+
+                padding:
+                    30px 22px;
+            }
+
+            .texto-escritura {
+
+                font-size: 17px;
+            }
+
+            .final p {
+
+                font-size: 19px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ======================================
+         PANTALLA DE BLOQUEO
+    ====================================== -->
+
+    <div id="pantalla-bloqueo">
+
+        <div class="bloqueo-contenido">
+
+            <div class="candado">
+                🔐
+            </div>
+
+            <h1>
+                Hay algo especial esperándote...
+            </h1>
+
+            <p>
+
+                Pero primero tienes que recordar
+                una fecha muy importante para nosotros ❤️
+
+            </p>
+
+            <input
+                type="password"
+                id="password"
+                maxlength="6"
+                placeholder="••••••"
+            >
+
+            <button id="desbloquear">
+
+                Desbloquear ❤️
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         CARGANDO
+    ====================================== -->
+
+    <div id="cargando">
+
+        <h2>
+
+            Preparando algo especial para ti... ❤️
+
+        </h2>
+
+    </div>
+
+
+    <!-- ======================================
+         CONTENIDO
+    ====================================== -->
+
+    <main id="contenido">
+
+
+        <div
+            class="corazones"
+            id="corazones"
+        ></div>
+
+
+        <!-- ==============================
+             PANTALLA 1
+        ============================== -->
+
+        <section
+            class="pantalla activa"
+            data-pantalla="0"
+        >
+
+            <div class="contenido-pantalla">
+
+                <h1 class="titulo-principal">
+
+                    ❤️ Para alguien muy especial ❤️
+
+                </h1>
+
+                <p class="subtitulo">
+
+                    Hay recuerdos que el tiempo nunca
+                    consigue borrar...
+
+                    <br>
+
+                    y personas que hacen que cada
+                    momento valga la pena.
+
+                </p>
+
+                <div class="botones">
+
+                    <button class="btn siguiente">
+
+                        Continuar ❤️
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             PANTALLA 2
+        ============================== -->
+
+        <section
+            class="pantalla"
+            data-pantalla="1"
+        >
+
+            <div class="contenido-pantalla">
+
+                <h2 class="titulo">
+
+                    🧊 Algunos de nuestros momentos
+
+                </h2>
+
+
+                <div class="escena">
+
+                    <div class="cubo">
+
+
+                        <div class="cara frente">
+
+                            <img
+                                src="foto1.jpeg"
+                                alt="Nuestro recuerdo 1"
+                            >
+
+                        </div>
+
+
+                        <div class="cara atras">
+
+                            <img
+                                src="foto2.jpeg"
+                                alt="Nuestro recuerdo 2"
+                            >
+
+                        </div>
+
+
+                        <div class="cara derecha">
+
+                            <img
+                                src="foto3.jpeg"
+                                alt="Nuestro recuerdo 3"
+                            >
+
+                        </div>
+
+
+                        <div class="cara izquierda">
+
+                            <img
+                                src="foto4.jpeg"
+                                alt="Nuestro recuerdo 4"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="fecha">
+
+                    ❤️ 17 • 11 • 22 ❤️
+
+                </div>
+
+
+                <p class="subtitulo">
+
+                    El día que comenzó una historia
+                    que significa muchísimo para mí.
+
+                </p>
+
+
+                <div class="botones">
+
+                    <button class="btn atras-btn">
+
+                        ← Atrás
+
+                    </button>
+
+                    <button class="btn siguiente">
+
+                        Siguiente ❤️
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             PANTALLA 3
+        ============================== -->
+
+        <section
+            class="pantalla"
+            data-pantalla="2"
+        >
+
+            <div class="contenido-pantalla">
+
+                <h2 class="titulo">
+
+                    ⏳ Nuestro tiempo
+
+                </h2>
+
+                <p class="subtitulo">
+
+                    Y cada segundo que pasa se convierte
+                    en otro recuerdo que guardar.
+
+                </p>
+
+
+                <div class="contador">
+
+
+                    <div class="tiempo">
+
+                        <span
+                            class="numero"
+                            id="anios"
+                        >
+                            0
+                        </span>
+
+                        <span class="etiqueta">
+                            Años
+                        </span>
+
+                    </div>
+
+
+                    <div class="tiempo">
+
+                        <span
+                            class="numero"
+                            id="meses"
+                        >
+                            0
+                        </span>
+
+                        <span class="etiqueta">
+                            Meses
+                        </span>
+
+                    </div>
+
+
+                    <div class="tiempo">
+
+                        <span
+                            class="numero"
+                            id="dias"
+                        >
+                            0
+                        </span>
+
+                        <span class="etiqueta">
+                            Días
+                        </span>
+
+                    </div>
+
+
+                    <div class="tiempo">
+
+                        <span
+                            class="numero"
+                            id="horas"
+                        >
+                            0
+                        </span>
+
+                        <span class="etiqueta">
+                            Horas
+                        </span>
+
+                    </div>
+
+
+                    <div class="tiempo">
+
+                        <span
+                            class="numero"
+                            id="minutos"
+                        >
+                            0
+                        </span>
+
+                        <span class="etiqueta">
+                            Minutos
+                        </span>
+
+                    </div>
+
+
+                    <div class="tiempo">
+
+                        <span
+                            class="numero"
+                            id="segundos"
+                        >
+                            0
+                        </span>
+
+                        <span class="etiqueta">
+                            Segundos
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="botones">
+
+                    <button class="btn atras-btn">
+
+                        ← Atrás
+
+                    </button>
+
+                    <button class="btn siguiente">
+
+                        Siguiente ❤️
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             PANTALLA 4
+        ============================== -->
+
+        <section
+            class="pantalla"
+            data-pantalla="3"
+        >
+
+            <div class="contenido-pantalla historia">
+
+                <div class="historia-corazon">
+
+                    ✨ ❤️ ✨
+
+                </div>
+
+
+                <h2 class="titulo">
+
+                    ✨ Y esto apenas comienza ✨
+
+                </h2>
+
+
+                <p class="subtitulo">
+
+                    Hemos vivido muchísimo desde aquel
+                    17 de noviembre de 2022.
+
+                </p>
+
+
+                <p class="subtitulo">
+
+                    Hemos creado recuerdos, aprendido,
+                    cambiado y compartido momentos que
+                    siempre voy a guardar.
+
+                </p>
+
+
+                <p class="subtitulo">
+
+                    Pero si algo me emociona, es pensar
+                    que todavía nos quedan muchísimas
+                    cosas por vivir.
+
+                </p>
+
+
+                <div class="frase-especial">
+
+                    Esto no es un recuerdo del pasado.
+
+                    <br>
+
+                    <strong>
+
+                        Es una pequeña parte de nuestra historia. ❤️
+
+                    </strong>
+
+                </div>
+
+
+                <div class="botones">
+
+                    <button class="btn atras-btn">
+
+                        ← Atrás
+
+                    </button>
+
+                    <button class="btn siguiente">
+
+                        Hay algo más... 💌
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             CARTA
+        ============================== -->
+
+        <section
+            class="pantalla"
+            data-pantalla="4"
+        >
+
+            <div class="contenido-pantalla">
+
+
+                <div class="carta">
+
+                    <h2>
+
+                        💌 Para ti...
+
+                    </h2>
+
+
+                    <div
+                        class="texto-escritura"
+                        id="textoCarta"
+                    ></div>
+
+
+                </div>
+
+
+                <div class="botones">
+
+                    <button class="btn atras-btn">
+
+                        ← Atrás
+
+                    </button>
+
+                    <button class="btn siguiente">
+
+                        Una última cosa... ❤️
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             FINAL
+        ============================== -->
+
+        <section
+            class="pantalla"
+            data-pantalla="5"
+        >
+
+            <div class="contenido-pantalla">
+
+                <div class="corazon-final">
+
+                    ❤️
+
+                </div>
+
+
+                <h2 class="final h2">
+
+                    Si tuviera que volver a elegir...
+
+                </h2>
+
+
+                <p class="final p">
+
+                    Te elegiría a ti.
+
+                    <br><br>
+
+                    Una y otra vez.
+
+                    <br><br>
+
+                    En esta vida y en todos los recuerdos
+                    que todavía nos quedan por crear. ❤️
+
+                </p>
+
+
+                <div class="fecha">
+
+                    17 • 11 • 22
+
+                </div>
+
+
+                <div class="botones">
+
+                    <button class="btn atras-btn">
+
+                        ← Atrás
+
+                    </button>
+
+                    <button
+                        class="btn"
+                        id="reiniciar"
+                    >
+
+                        ❤️ Volver a empezar
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             INDICADORES
+        ============================== -->
+
+        <div id="indicadores">
+
+            <span class="punto activo"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+
+        </div>
+
+
+        <!-- ==============================
+             MÚSICA
+        ============================== -->
+
+        <audio
+            id="musica"
+            loop
+        >
+
+            <source
+                src="nuestra-cancion.mp3"
+                type="audio/mpeg"
+            >
+
+        </audio>
+
+
+        <button id="boton-musica">
+
+            🔊
+
+        </button>
+
+
+    </main>
+
+
+    <!-- ======================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script>
+
+
+        const password =
+            document.getElementById(
+                "password"
+            );
+
+        const desbloquear =
+            document.getElementById(
+                "desbloquear"
+            );
+
+        const pantallaBloqueo =
+            document.getElementById(
+                "pantalla-bloqueo"
+            );
+
+        const cargando =
+            document.getElementById(
+                "cargando"
+            );
+
+        const contenido =
+            document.getElementById(
+                "contenido"
+            );
+
+        const musica =
+            document.getElementById(
+                "musica"
+            );
+
+        const botonMusica =
+            document.getElementById(
+                "boton-musica"
+            );
+
+        const corazones =
+            document.getElementById(
+                "corazones"
+            );
+
+        const pantallas =
+            document.querySelectorAll(
+                ".pantalla"
+            );
+
+        const puntos =
+            document.querySelectorAll(
+                ".punto"
+            );
+
+
+        let pantallaActual = 0;
+
+        /* Evita que la carta se escriba
+           varias veces */
+
+        let cartaEscrita = false;
+
+
+
+        /* ==============================
+           DESBLOQUEAR
+        ============================== */
+
+        desbloquear.addEventListener(
+            "click",
+            desbloquearPagina
+        );
+
+
+        password.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    desbloquearPagina();
+
+                }
+
+            }
+        );
+
+
+        function desbloquearPagina() {
+
+
+            if (
+                password.value !==
+                "171122"
+            ) {
+
+                alert(
+                    "Esa no es la fecha correcta 😭❤️"
+                );
+
+                return;
+
+            }
+
+
+            pantallaBloqueo.classList.add(
+                "ocultar"
+            );
+
+
+            cargando.classList.add(
+                "mostrar"
+            );
+
+
+            setTimeout(
+                function() {
+
+                    cargando.classList.remove(
+                        "mostrar"
+                    );
+
+                    contenido.style.display =
+                        "block";
+
+                    iniciarMusica();
+
+                    iniciarCorazones();
+
+                    iniciarContador();
+
+                },
+                2200
+            );
+
+        }
+
+
+
+        /* ==============================
+           CAMBIAR PANTALLA
+        ============================== */
+
+        function mostrarPantalla(numero) {
+
+
+            if (
+                numero < 0 ||
+                numero >= pantallas.length
+            ) {
+
+                return;
+
+            }
+
+
+            pantallas[
+                pantallaActual
+            ].classList.remove(
+                "activa"
+            );
+
+
+            puntos[
+                pantallaActual
+            ].classList.remove(
+                "activo"
+            );
+
+
+            pantallaActual =
+                numero;
+
+
+            pantallas[
+                pantallaActual
+            ].classList.add(
+                "activa"
+            );
+
+
+            puntos[
+                pantallaActual
+            ].classList.add(
+                "activo"
+            );
+
+
+            /* La carta solo se escribe una vez */
+
+            if (
+                pantallaActual === 4 &&
+                !cartaEscrita
+            ) {
+
+                cartaEscrita = true;
+
+                escribirCarta();
+
+            }
+
+        }
+
+
+
+        /* ==============================
+           SIGUIENTE
+        ============================== */
+
+        document
+            .querySelectorAll(".siguiente")
+            .forEach(
+                function(boton) {
+
+                    boton.addEventListener(
+                        "click",
+                        function() {
+
+                            mostrarPantalla(
+                                pantallaActual + 1
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+
+        /* ==============================
+           ATRÁS
+        ============================== */
+
+        document
+            .querySelectorAll(".atras-btn")
+            .forEach(
+                function(boton) {
+
+                    boton.addEventListener(
+                        "click",
+                        function() {
+
+                            mostrarPantalla(
+                                pantallaActual - 1
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+
+        /* ==============================
+           REINICIAR
+        ============================== */
+
+        document
+            .getElementById("reiniciar")
+            .addEventListener(
+                "click",
+                function() {
+
+                    mostrarPantalla(0);
+
+                }
+            );
+
+
+
+        /* ==============================
+           MÚSICA
+        ============================== */
+
+        function iniciarMusica() {
+
+            musica.play()
+                .then(
+                    function() {
+
+                        botonMusica.textContent =
+                            "🔊";
+
+                    }
+                )
+                .catch(
+                    function() {
+
+                        botonMusica.textContent =
+                            "▶️";
+
+                    }
+                );
+
+        }
+
+
+        botonMusica.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    musica.paused
+                ) {
+
+                    musica.play();
+
+                    botonMusica.textContent =
+                        "🔊";
+
+                } else {
+
+                    musica.pause();
+
+                    botonMusica.textContent =
+                        "🔇";
+
+                }
+
+            }
+        );
+
+
+
+        /* ==============================
+           CORAZONES
+        ============================== */
+
+        function iniciarCorazones() {
+
+
+            const simbolos = [
+
+                "❤️",
+                "💕",
+                "💗",
+                "💖",
+                "💘",
+                "💓"
+
+            ];
+
+
+            setInterval(
+                function() {
+
+                    const corazon =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    corazon.className =
+                        "corazon";
+
+
+                    corazon.textContent =
+                        simbolos[
+                            Math.floor(
+                                Math.random() *
+                                simbolos.length
+                            )
+                        ];
+
+
+                    corazon.style.left =
+                        Math.random() *
+                        100 +
+                        "%";
+
+
+                    corazon.style.fontSize =
+                        (
+                            15 +
+                            Math.random() *
+                            25
+                        ) +
+                        "px";
+
+
+                    corazon.style.animationDuration =
+                        (
+                            6 +
+                            Math.random() *
+                            6
+                        ) +
+                        "s";
+
+
+                    corazones.appendChild(
+                        corazon
+                    );
+
+
+                    setTimeout(
+                        function() {
+
+                            corazon.remove();
+
+                        },
+                        13000
+                    );
+
+                },
+                600
+            );
+
+        }
+
+
+
+        /* ==============================
+           CONTADOR
+        ============================== */
+
+        function iniciarContador() {
+
+
+            const inicio =
+                new Date(
+                    2022,
+                    10,
+                    17,
+                    0,
+                    0,
+                    0
+                );
+
+
+            function actualizar() {
+
+
+                const ahora =
+                    new Date();
+
+
+                let anios =
+                    ahora.getFullYear() -
+                    inicio.getFullYear();
+
+
+                let meses =
+                    ahora.getMonth() -
+                    inicio.getMonth();
+
+
+                let dias =
+                    ahora.getDate() -
+                    inicio.getDate();
+
+
+                let horas =
+                    ahora.getHours() -
+                    inicio.getHours();
+
+
+                let minutos =
+                    ahora.getMinutes() -
+                    inicio.getMinutes();
+
+
+                let segundos =
+                    ahora.getSeconds() -
+                    inicio.getSeconds();
+
+
+                if (
+                    segundos < 0
+                ) {
+
+                    segundos += 60;
+
+                    minutos--;
+
+                }
+
+
+                if (
+                    minutos < 0
+                ) {
+
+                    minutos += 60;
+
+                    horas--;
+
+                }
+
+
+                if (
+                    horas < 0
+                ) {
+
+                    horas += 24;
+
+                    dias--;
+
+                }
+
+
+                if (
+                    dias < 0
+                ) {
+
+                    const diasMesAnterior =
+                        new Date(
+                            ahora.getFullYear(),
+                            ahora.getMonth(),
+                            0
+                        ).getDate();
+
+
+                    dias +=
+                        diasMesAnterior;
+
+                    meses--;
+
+                }
+
+
+                if (
+                    meses < 0
+                ) {
+
+                    meses += 12;
+
+                    anios--;
+
+                }
+
+
+                document.getElementById(
+                    "anios"
+                ).textContent =
+                    anios;
+
+
+                document.getElementById(
+                    "meses"
+                ).textContent =
+                    meses;
+
+
+                document.getElementById(
+                    "dias"
+                ).textContent =
+                    dias;
+
+
+                document.getElementById(
+                    "horas"
+                ).textContent =
+                    horas;
+
+
+                document.getElementById(
+                    "minutos"
+                ).textContent =
+                    minutos;
+
+
+                document.getElementById(
+                    "segundos"
+                ).textContent =
+                    segundos;
+
+            }
+
+
+            actualizar();
+
+
+            setInterval(
+                actualizar,
+                1000
+            );
+
+        }
+
+
+
+        /* ==============================
+           CARTA
+        ============================== */
+
+        function escribirCarta() {
+
+
+            const elemento =
+                document.getElementById(
+                    "textoCarta"
+                );
+
+
+            elemento.innerHTML = "";
+
+
+            const texto =
+
+`Mi amor ❤️
+
+No sé si alguna vez voy a encontrar las palabras exactas para explicarte todo lo que significas para mí, pero hoy quería intentarlo.
+
+Desde aquel 17 de noviembre de 2022 han pasado muchísimas cosas. Hemos reído, hemos compartido momentos que quisiera guardar para siempre, hemos crecido y también hemos tenido días que no han sido tan fáciles.
+
+Y creo que justamente ahí está lo bonito de nuestra historia. No solamente en los momentos perfectos, sino en todo lo que hemos ido construyendo poco a poco, en cada conversación, cada mirada, cada abrazo, cada risa y cada recuerdo que ahora forma parte de nosotros.
+
+A veces pienso en todo lo que ha pasado desde aquel día y me cuesta creer cuánto puede cambiar una vida cuando aparece una persona especial.
+
+Tú llegaste a formar parte de la mía de una manera que quizá nunca imaginé, y hoy no puedo mirar todos esos recuerdos sin sentir un enorme cariño y agradecimiento por tenerte en mi vida.
+
+Gracias por ser tú.
+Gracias por cada momento que me has regalado.
+Gracias por las sonrisas, por las conversaciones, por las locuras, por los pequeños detalles y por todos esos momentos que quizás parecían simples, pero que para mí terminaron significando muchísimo.
+
+Y si algún día volvemos a mirar atrás, quiero que podamos ver esta etapa y sonreír, recordando todo lo que vivimos y pensando en todo lo que todavía nos faltaba por vivir.
+
+Porque esta página no intenta guardar toda nuestra historia. Sería imposible.
+
+Solo quería guardar un pedacito de ella.
+
+Un pedacito de nosotros.
+
+Y si pudiera volver al 17 de noviembre de 2022 sabiendo todo lo que vendría después, volvería a elegir ese día.
+
+Volvería a elegir conocerte.
+Volvería a elegir cada recuerdo.
+Volvería a elegir cada momento.
+
+Y, sobre todo...
+
+Te volvería a elegir a ti. ❤️
+
+Espero que nunca olvides lo muchísimo que te quiero y lo especial que eres para mí.
+
+Esto es solo una pequeña parte de nuestra historia, porque todavía nos quedan muchísimos recuerdos por crear.
+
+Con todo mi amor,
+
+❤️ Siempre tú.`;
+
+
+
+            let posicion = 0;
+
+
+            function escribir() {
+
+
+                if (
+                    posicion <
+                    texto.length
+                ) {
+
+
+                    if (
+                        texto.charAt(
+                            posicion
+                        ) === "\n"
+                    ) {
+
+                        /* AQUÍ ESTÁ EL CAMBIO:
+                           antes era <br><br>
+                           ahora solo dejamos un salto */
+
+                        elemento.innerHTML +=
+                            "<br>";
+
+                    } else {
+
+                        elemento.innerHTML +=
+                            texto.charAt(
+                                posicion
+                            );
+
+                    }
+
+
+                    posicion++;
+
+
+                    setTimeout(
+                        escribir,
+                        35
+                    );
+
+                }
+
+            }
+
+
+            escribir();
+
+        }
+
+
+
+        /* ==============================
+           CORAZÓN AL HACER CLICK
+        ============================== */
+
+        document.addEventListener(
+            "click",
+            function(event) {
+
+
+                if (
+                    contenido.style.display !==
+                    "block"
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    event.target.tagName ===
+                    "BUTTON"
+                ) {
+
+                    return;
+
+                }
+
+
+                const corazon =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                corazon.textContent =
+                    "❤️";
+
+
+                corazon.style.position =
+                    "fixed";
+
+
+                corazon.style.left =
+                    event.clientX +
+                    "px";
+
+
+                corazon.style.top =
+                    event.clientY +
+                    "px";
+
+
+                corazon.style.fontSize =
+                    "25px";
+
+
+                corazon.style.pointerEvents =
+                    "none";
+
+
+                corazon.style.zIndex =
+                    "200";
+
+
+                corazon.style.transition =
+                    "all 1s ease";
+
+
+                document.body.appendChild(
+                    corazon
+                );
+
+
+                setTimeout(
+                    function() {
+
+                        corazon.style.transform =
+                            "translateY(-80px) scale(1.5)";
+
+                        corazon.style.opacity =
+                            "0";
+
+                    },
+                    50
+                );
+
+
+                setTimeout(
+                    function() {
+
+                        corazon.remove();
+
+                    },
+                    1100
+                );
+
+            }
+        );
+
+
+    </script>
+
+</body>
+
+</html>
